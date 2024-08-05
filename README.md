@@ -9,6 +9,7 @@ This is the backend of the chatbot application built with FastAPI. It handles us
 - [Installation](#installation)
 - [Running the Server](#running-the-server)
 - [Environment Variables](#environment-variables)
+- [API Documentation](#api-documentation)
 
 ## Features
 
@@ -70,4 +71,9 @@ Ensure you have a .env file in the root directory with the following variables
 SQLALCHEMY_DATABASE_URL=postgresql://username:password@localhost:5432/chatbot_api
 ```
 Replace `username`, `password` with your actual PostgreSQL credentials and a secure secret key.
+
+## API Documentation
+
+Access the API documentation at `http://localhost:8000/docs` for interactive API testing.
+
 
