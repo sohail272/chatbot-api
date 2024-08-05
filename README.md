@@ -8,7 +8,6 @@ This is the backend of the chatbot application built with FastAPI. It handles us
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Running the Server](#running-the-server)
-- [Environment Variables](#environment-variables)
 - [API Documentation](#api-documentation)
 
 ## Features
@@ -47,30 +46,15 @@ Before you begin, ensure you have the following:
 
 1. **Configure the PostgreSQL database**:
    
-   Create a PostgreSQL database and update your `.env` file with the database URL
+   Create a PostgreSQL database and update your `database.py` file with the database URL
    
    ```bash
    SQLALCHEMY_DATABASE_URL=postgresql://username:password@localhost:5432/chatbot_api
-   
-3. **Apply database migrations (if applicable)**:
-
-   If you're using Alembic for migrations, run the following command to apply migrations:
-  
-   ```bash
-   alembic upgrade head
 
 4. **Start the FastAPI server**:
 
    ```bash
    uvicorn main:app --reload
-
-## Environment Variables
-
-Ensure you have a .env file in the root directory with the following variables
-```bash
-SQLALCHEMY_DATABASE_URL=postgresql://username:password@localhost:5432/chatbot_api
-```
-Replace `username`, `password` with your actual PostgreSQL credentials and a secure secret key.
 
 ## API Documentation
 
