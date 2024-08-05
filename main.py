@@ -115,27 +115,20 @@ def read_messages(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
         logger.exception(f"An error occurred while fetching messages: {exc}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-@app.post("/messages/", response_model=schemas.Message)
-def create_message(message: schemas.MessageCreate, db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
-    logger.info(f"User {current_user.username} is creating a new message")
+@app.post("/messages/", response_model=List[schemas.Message])
+def create_user_message(message: schemas.MessageCreate, db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
     try:
-        new_message = crud.create_message(db=db, message=message, sender='user')
-        logger.info(f"Message created with ID {new_message.id} by user {current_user.username}")
-        return new_message
+        # Create user message
+        user_message = crud.create_message(db=db, message=message, sender='user')
+        
+        # Create system response
+        bot_response_content = f"Your message was recorded as: {message.content}"
+        system_message = crud.create_message(db=db, message=schemas.MessageCreate(content=bot_response_content), sender='system')
+        
+        # Return both messages
+        return [user_message, system_message]
     except Exception as exc:
-        logger.exception(f"An error occurred while creating a message: {exc}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
-
-@app.post("/chatbot/respond/", response_model=schemas.Message)
-def chatbot_respond(message: schemas.MessageCreate, db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
-    logger.info(f"User {current_user.username} is requesting a chatbot response")
-    try:
-        bot_response = f"You said: {message.content}"
-        response_message = crud.create_message(db=db, message=schemas.MessageCreate(content=bot_response), sender='system')
-        logger.info(f"Chatbot responded with message ID {response_message.id}")
-        return response_message
-    except Exception as exc:
-        logger.exception(f"An error occurred while generating chatbot response: {exc}")
+        logger.exception(f"An error occurred while creating messages: {exc}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @app.delete("/messages/{message_id}", response_model=schemas.Message)
