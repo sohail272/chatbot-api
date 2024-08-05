@@ -7,7 +7,7 @@ from dotenv import load_dotenv # type: ignore
 
 load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL", "postgresql://abdulsohail@localhost:5432/chatbot_api")
+SQLALCHEMY_DATABASE_URL = "postgresql://username:password@localhost:5432/chatbot_api"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
