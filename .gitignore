@@ -1,9 +1,13 @@
-# Python
 __pycache__/
 *.py[cod]
+*.pyo
+.Python
+
+env/
+venv/
+ENV/
 .env
 
-# Editor
-.idea/
 .vscode/
 
+.DS_Store

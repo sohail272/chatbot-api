@@ -1,9 +1,13 @@
 # database.py
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv # type: ignore
 
-SQLALCHEMY_DATABASE_URL = "postgresql://abdulsohail:@localhost:5432/chatbot_api"
+load_dotenv()
+
+SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL", "postgresql://abdulsohail@localhost:5432/chatbot_api")
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
