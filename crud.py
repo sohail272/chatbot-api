@@ -1,4 +1,3 @@
-# crud.py
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 import models, schemas
@@ -15,8 +14,25 @@ def create_user(db: Session, user: schemas.UserCreate):
 def get_user(db: Session, username: str):
     return db.query(models.User).filter(models.User.username == username).first()
 
+def get_or_create_welcome_message(db: Session):
+    # Check if any messages exist
+    messages = db.query(models.Message).all()
+    
+    if not messages:
+        # If no messages exist, create a welcome message
+        welcome_message = models.Message(
+            content="Welcome to the chatbot! I will just echo back whatever you say. How can I assist you today?",
+            sender="system"
+        )
+        db.add(welcome_message)
+        db.commit()
+        db.refresh(welcome_message)
+        messages.append(welcome_message)
+    
+    return messages
+
 def get_messages(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Message).offset(skip).limit(limit).all()
+    return get_or_create_welcome_message(db)[skip:limit]
 
 def get_message(db: Session, message_id: int):
     return db.query(models.Message).filter(models.Message.id == message_id).first()
